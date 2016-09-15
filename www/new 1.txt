@@ -1,0 +1,46 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/sketch.js"></script>
+</head>
+<body>
+	<canvas onmousemove="showCoords(event)" id="SketchPad" width="800" height="600" style="border:1px solid black"></canvas>
+ 
+	<script type="text/javascript">
+	  <script type="text/javascript">
+    // Get the specific canvas element from the HTML document
+    var canvas = document.getElementById('sketchpad');
+
+    // If the browser supports the canvas tag, get the 2d drawing context for this canvas
+    if (canvas.getContext)
+        var ctx = canvas.getContext('2d');
+
+    // Draws a dot at a specific position on the supplied canvas name
+    // Parameters are: A canvas context, the x position, the y position
+    function drawDot(ctx,x,y) {
+        // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
+        r=0; g=0; b=0; a=255;
+
+        // Select a fill style
+        ctx.fillStyle = "rgba("+r+","+g+","+b+","+(a/255)+")";
+        // Draw a filled circle
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI*2, true);
+        ctx.closePath();
+        ctx.fill();
+    }
+	
+	function showCoords(event){
+		var x = event.clientX;
+		var y = event.clientY;
+		var coords = "X coords: " + x + ", Y coords: " + y;
+		drawDot(ctx,x,y);
+    //document.getElementById("SketchPad").innerHTML = coords;
+		
+	}
+</script>
+	</script>
+        
+</body>
+</html>
