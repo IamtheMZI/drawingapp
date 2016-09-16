@@ -1,4 +1,10 @@
 var drawingUtil = null;
+///////////////////////////////////////////////////////////
+// Socket IO stuff
+///////////////////////////////////////////////////////////
+var socket;
+var isConnected = false;
+
 $(function() {
 	String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 	var theCanvas = document.getElementById("theCanvas");
@@ -11,12 +17,33 @@ $(function() {
 	   var theNewVal = $(this).val();
 	   drawingUtil.setStrokeWeight(theNewVal);
     });
+	$( ".bgColor" ).bind( "touchend click", function(event, ui) {
+	   var theNewVal = $(this).val();
+	   drawingUtil.setBackgroundColor(theNewVal);
+    });
 	$( ".strokeColor" ).bind( "touchend click", function(event, ui) {
 	   var theNewVal = $(this).val();
 	   drawingUtil.setStrokeColor(theNewVal);
     });
 	$( "#clearScreen" ).bind( "touchend click", function(event, ui) {
 	   drawingUtil.clear();
+    });
+	$(".sideNav").bind("swipeleft",function(){
+		closeNav();
+	});
+	// //document.addEventListener('deviceready', function() {
+     socket = io.connect('http://192.168.0.113:3000');
+	 socket.on('connection', function(tweet) {  
+    // todo: add the tweet as a DOM node
+		isConnected = true;
+	});
+	//socket.on('tweet', function(tweet) {  
+		
+	//});
+	
+	socket.on('disconnect', function () {
+		isConnected = false;
+		console.log("Disconnected ");
     });
 	
 });
@@ -40,7 +67,10 @@ function DrawingUtil(aCanvas) {
 // Draw on Canvas	
 	function draw(event) {
 		if(isDrawing) {
-			context.lineTo(getX(event),getY(event));
+			var x = getX(event);
+			var y = getY(event);
+			sendData(x,y);
+			context.lineTo(x,y);
 			context.stroke();
 		}
 		event.preventDefault();
@@ -99,6 +129,10 @@ function DrawingUtil(aCanvas) {
 		context.strokeStyle = color;
 		$('#currentColor').css('background-color',color);
 	}
+	
+	this.setBackgroundColor = function(color){
+		$('#theCanvas').css('background-color',color);
+	}
 
 // Listen to touch and mouse events	
 	function init() {
@@ -109,6 +143,11 @@ function DrawingUtil(aCanvas) {
 		canvas.addEventListener("mousemove",draw,false);
 		canvas.addEventListener("mouseup",stop,false);
 		canvas.addEventListener("mouseout",stop,false);
+	}
+}
+ function sendData(p,q){
+	if(socket.connected){
+		socket.emit("tweet",{x_val: p, y_val: q});
 	}
 }
 
