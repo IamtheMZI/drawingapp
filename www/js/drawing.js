@@ -1,9 +1,7 @@
 var drawingUtil = null;
-var nav_open = false;
-///////////////////////////////////////////////////////////
-// Socket IO stuff
-///////////////////////////////////////////////////////////
+var nav_open = false; //Side navigation bar
 var socket, curColor, curSize;
+// Data to be sent
 var t = {
 	x_val: 0,
 	y_val: 0,
@@ -13,7 +11,13 @@ var t = {
 	size: 1,
 	bg: 'white'
 };
+// Joining a canvas
+var canvasinfo = {
+	name:'',
+	room:''
+};
 
+//Main Function
 $(function() {
 	var c = document.getElementById("theCanvas1");
 	var ctx = c.getContext("2d");
@@ -28,15 +32,21 @@ $(function() {
 	c.height = window.innerHeight;
 	theCanvas.width = window.innerWidth;
 	theCanvas.height = window.innerHeight;
-	
+
+/////////////////   BINDING TO CHANGES ON BUTTONS AND SLIDERS ///////////////////////////////////	
 	$( "#weightSlider" ).bind( "change", function(event, ui) {
 	   var theNewVal = $(this).val();
 	   curSize = theNewVal;
 	   drawingUtil.setStrokeWeight(theNewVal);
     });
-	$( ".bgColor" ).bind( "touchend click", function(event, ui) {
+	$( ".bgColor" ).bind( "touchend click", function(event, ui) {	   
 	   var theNewVal = $(this).val();
+	   t.bgchange = true;
+	   t.bg = theNewVal;
+	   sendData(t);
+	   t.clear = false;
 	   drawingUtil.setBackgroundColor(theNewVal);
+	   $('#theCanvas1').css('background-color',theNewVal);
     });
 	$( ".strokeColor" ).bind( "touchend click", function(event, ui) {
 	   var theNewVal = $(this).val();
@@ -50,22 +60,34 @@ $(function() {
 	   drawingUtil.clear();
 	   ctx.clearRect(0,0,2000,2000);
     });
+	
 	$("#mySidenav").bind("swipeleft",function(){
 		closeNav();
 	});
-	// //document.addEventListener('deviceready', function() {
+	
+////////////////// SOCKET STUFF ////////////////////////////////////////////////
      //socket = io.connect('http://192.168.1.126:3000');
-	 //socket = io.connect('http://192.168.0.113:3000');
-	 socket = io.connect('http://73.222.50.111:3000');
-	 socket.on('connection', function(tweet) {  
-    // todo: add the tweet as a DOM node
+	 socket = io.connect('http://192.168.0.113:3000');
+	 //socket = io.connect('http://73.222.50.111:3000');
+	 
+	 // Connecting to the Server
+	 socket.on('connect', function(tweet) {  
+		canvasinfo.name = prompt('Please enter your name:');
+		canvasinfo.room = prompt('Please enter your roomname');
+		socket.emit('adduser',canvasinfo.name,canvasinfo.room);
 	});
+	
+	// Sending Data to the Server
 	socket.on('tweet', function(tweet) {  
-    // todo: add the tweet as a DOM node
 		if(tweet.clear){
 			ctx.clearRect(0,0,2000,2000);
 			drawingUtil.clear();
-		} else {
+		} else if(tweet.bgchange){
+			var bg = tweet.bg;
+			t.bg = tweet.bg;
+			drawingUtil.setBackgroundColor(tweet.bg);
+			$('#theCanvas1').css('background-color',tweet.bg);
+		} else{
 			ctx.lineWidth = tweet.size;
 			if(tweet.touch=="touchstart"){
 				ctx.beginPath();
@@ -81,10 +103,11 @@ $(function() {
 		}
 		
 	});
-	
+	// Disconnecting from the Server
 	socket.on('disconnect', function () {
 		console.log("Disconnected ");
     });
+	
 	
 });
 
@@ -161,6 +184,7 @@ function DrawingUtil(aCanvas) {
 
 // Get Y coordinate of touch	
 	function getY(event) {
+		var headerHeight = $("#theHeader").height();
 		if(event.type.contains("touch")) {
 			return (event.targetTouches[0].pageY - headerHeight);
 		}
@@ -186,22 +210,18 @@ function DrawingUtil(aCanvas) {
 	this.setStrokeWeight = function(weight) {
     	context.lineWidth = weight;
 		t.size = weight;
-		//sendData(t);
 	}
 
 // Change Stroke Color	
 	this.setStrokeColor = function(color){
 		context.strokeStyle = color;
 		t.color = color;
-		//sendData(t);
 		$('#currentColor').css('background-color',color);
 	}
 	
 	
 	this.setBackgroundColor = function(color){
 		$('#theCanvas').css('background-color',color);
-		t.bg= color;
-		//sendData(t);
 	}
 
 // Listen to touch and mouse events	
