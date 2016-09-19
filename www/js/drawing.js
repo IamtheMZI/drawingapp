@@ -1,4 +1,5 @@
 var drawingUtil = null;
+var nav_open = false;
 ///////////////////////////////////////////////////////////
 // Socket IO stuff
 ///////////////////////////////////////////////////////////
@@ -14,13 +15,17 @@ var t = {
 };
 
 $(function() {
-	var c = document.getElementById("theCanvas");
+	var c = document.getElementById("theCanvas1");
 	var ctx = c.getContext("2d");
 
 	String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 	var theCanvas = document.getElementById("theCanvas");
 	drawingUtil = new DrawingUtil(theCanvas);
+	var sidenav = document.getElementById("mySidenav");
 	
+	sidenav.height = window.innerHeight;
+	c.width = window.innerWidth;
+	c.height = window.innerHeight;
 	theCanvas.width = window.innerWidth;
 	theCanvas.height = window.innerHeight;
 	
@@ -39,9 +44,13 @@ $(function() {
 	   drawingUtil.setStrokeColor(theNewVal);
     });
 	$( "#clearScreen" ).bind( "touchend click", function(event, ui) {
+	   t.clear = true;
+	   sendData(t);
+	   t.clear = false;
 	   drawingUtil.clear();
+	   ctx.clearRect(0,0,2000,2000);
     });
-	$(".sideNav").bind("swipeleft",function(){
+	$("#mySidenav").bind("swipeleft",function(){
 		closeNav();
 	});
 	// //document.addEventListener('deviceready', function() {
@@ -55,6 +64,7 @@ $(function() {
     // todo: add the tweet as a DOM node
 		if(tweet.clear){
 			ctx.clearRect(0,0,2000,2000);
+			drawingUtil.clear();
 		} else {
 			ctx.lineWidth = tweet.size;
 			if(tweet.touch=="touchstart"){
@@ -162,9 +172,6 @@ function DrawingUtil(aCanvas) {
 // Clear the whole canvas	
 	this.clear = function() {
 		context.clearRect(0,0,canvas.width,canvas.height);
-		t.clear = true;
-		sendData(t);
-		t.clear = false;
 	}
 
 // Save the canvas as an image
@@ -218,10 +225,17 @@ function DrawingUtil(aCanvas) {
 
 // Open the Navigation Pane for the Canvas
 function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
+	if(!nav_open){
+		document.getElementById("mySidenav").style.width = "250px";
+		nav_open = true;
+	} else {
+		closeNav();
+	}
+
 }
 
 // Close the Navigation Pane for the Canvas
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+	nav_open = false;
 }
