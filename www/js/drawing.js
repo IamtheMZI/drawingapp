@@ -67,8 +67,8 @@ $(function() {
 	
 ////////////////// SOCKET STUFF ////////////////////////////////////////////////
      //socket = io.connect('http://192.168.1.126:3000');
-	 socket = io.connect('http://192.168.0.113:3000');
-	 //socket = io.connect('http://73.222.50.111:3000');
+	 //socket = io.connect('http://192.168.0.113:3000');
+	 socket = io.connect('http://54.67.125.184:3000');
 	 
 	 // Connecting to the Server
 	 socket.on('connect', function(tweet) {  
