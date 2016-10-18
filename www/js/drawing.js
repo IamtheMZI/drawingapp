@@ -245,17 +245,22 @@ function DrawingUtil(aCanvas) {
         FR.onload = function(e) {
            var img = new Image();
            img.onload = function() {
-             context.drawImage(img, 20, 20, img.width*1,img.height*1);
+             //context.drawImage(img, 20, 20, img.width*1,img.height*1);
 			 t.image=true;
 			 t.buffer=img.src.toString('base64');
 			 sendData(t);
 			 t.image = false;
+			 t.buffer ='';
            };
            img.src = e.target.result;
         };       
         FR.readAsDataURL( this.files[0] );
     }
 }
+
+	function drawImage(img){
+		context.drawImage(img, 20, 20, img.width*1,img.height*1);
+	}
 
 // Listen to touch and mouse events	
 	function init() {
