@@ -59,13 +59,16 @@
 			<button class="bgColor" style="background-color:white" value="white"></button>
 		  </a><br>
 		  <a> Image File: </a><br/>
-		  <a><input type="file" id="imageLoader" name="imageLoader"/></a>
+		  <div><input type="file" id="imageLoader"/></div>
+		  <a>Image Size </a>
+		  <a> <input id="imageSlider" type="range" value="1" min="0.3" max="3" /> </a>
+		  
 		  <a><button id="clearScreen"> Clear Screen </button></a>
 		  <a onclick="window.plugins.insomnia.allowSleepAgain()" href="index.html"><button>Home Screen</button></a>
 		</div>
 		  <p id="demo"></p>
 		<div style="float:left;position:absolute">
-		<canvas id="theCanvas" style="border:1px solid black;alpha:0.5;display:inline;position:absolute"></canvas>
+		<canvas background="img/ionic.png" id="theCanvas" style="border:1px solid black;alpha:0.5;display:inline;position:absolute"></canvas>
 		<canvas id="theCanvas1" style="border:1px solid black;alpha:0.5;display:inline"></canvas>
 		</div>
       </ion-content>

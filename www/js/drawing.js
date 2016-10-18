@@ -1,6 +1,6 @@
 var drawingUtil = null;
 var nav_open = false; //Side navigation bar
-var socket, curColor, curSize;
+var socket, curColor, curSize, imSize;
 // Data to be sent
 var t = {
 	x_val: 0,
@@ -9,7 +9,10 @@ var t = {
 	clear: false,
 	color: 'black',
 	size: 1,
-	bg: 'white'
+	bg: 'white',
+	image:false,
+	buffer:''
+
 };
 // Joining a canvas
 var canvasinfo = {
@@ -19,6 +22,7 @@ var canvasinfo = {
 
 //Main Function
 $(function() {
+	
 	var c = document.getElementById("theCanvas1");
 	var ctx = c.getContext("2d");
 
@@ -64,6 +68,10 @@ $(function() {
 	$("#mySidenav").bind("swipeleft",function(){
 		closeNav();
 	});
+	$( "#imageSlider" ).bind( "change", function(event, ui) {
+	   var theNewVal = $(this).val();
+	   imSize = theNewVal;
+    });
 	
 ////////////////// SOCKET STUFF ////////////////////////////////////////////////
      //socket = io.connect('http://192.168.1.126:3000');
@@ -87,7 +95,11 @@ $(function() {
 			t.bg = tweet.bg;
 			drawingUtil.setBackgroundColor(tweet.bg);
 			$('#theCanvas1').css('background-color',tweet.bg);
-		} else{
+		} else if(tweet.image){
+			var img = new Image();
+			img.src = "data:image/png;base64" + tweet.buffer;
+			ctx.drawImage(img, 20, 20);
+		}else{
 			ctx.lineWidth = tweet.size;
 			if(tweet.touch=="touchstart"){
 				ctx.beginPath();
@@ -113,6 +125,7 @@ $(function() {
 
 // Drawing Class
 function DrawingUtil(aCanvas) {
+	var my_image = document.getElementById("imageLoader");
 	var canvas = aCanvas;
 	var context = canvas.getContext("2d");
 	var isDrawing = false;
@@ -141,7 +154,7 @@ function DrawingUtil(aCanvas) {
 
 // Draw on Canvas	
 	function draw(event) {
-		var x, y;
+		var x, y,imsize;
 		if(isDrawing) {
 			x = getX(event);
 			y = getY(event);
@@ -154,6 +167,8 @@ function DrawingUtil(aCanvas) {
 			console.log(curColor);
 			context.lineTo(x,y);
 			context.stroke();
+			imsize = imSize;
+			
 		}
 		event.preventDefault();
 	}
@@ -223,6 +238,24 @@ function DrawingUtil(aCanvas) {
 	this.setBackgroundColor = function(color){
 		$('#theCanvas').css('background-color',color);
 	}
+	
+	function setImage() {
+    if ( this.files && this.files[0] ) {
+        var FR= new FileReader();
+        FR.onload = function(e) {
+           var img = new Image();
+           img.onload = function() {
+             context.drawImage(img, 20, 20, img.width*1,img.height*1);
+			 t.image=true;
+			 t.buffer=img.src.toString('base64');
+			 sendData(t);
+			 t.image = false;
+           };
+           img.src = e.target.result;
+        };       
+        FR.readAsDataURL( this.files[0] );
+    }
+}
 
 // Listen to touch and mouse events	
 	function init() {
@@ -233,6 +266,7 @@ function DrawingUtil(aCanvas) {
 		canvas.addEventListener("mousemove",draw,false);
 		canvas.addEventListener("mouseup",stop,false);
 		canvas.addEventListener("mouseout",stop,false);
+		my_image.addEventListener("change", setImage, false);
 		
 	}
 }
