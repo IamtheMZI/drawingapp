@@ -1,3 +1,10 @@
+//Working Prototype 
+/*
+* Date: 10-18-2016
+* Author: Muhammad Zian Ilahee
+* State: Working with drawing share, image upload, clear screen, background color change
+* Defect: Simultaneous Drawing is not possible
+*/
 var drawingUtil = null;
 var nav_open = false; //Side navigation bar
 var socket, curColor, curSize, imSize;
