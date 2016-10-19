@@ -1,0 +1,15 @@
+{
+  "name": "socket.io-stream",
+  "homepage": "https://github.com/nkzawa/socket.io-stream",
+  "version": "0.9.1",
+  "_release": "0.9.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.9.1",
+    "commit": "f7452c646b66cdc3f2b3b26f771137bbe91bf640"
+  },
+  "_source": "https://github.com/nkzawa/socket.io-stream.git",
+  "_target": "^0.9.1",
+  "_originalSource": "socket.io-stream",
+  "_direct": true
+}

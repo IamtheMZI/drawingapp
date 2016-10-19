@@ -11,7 +11,8 @@ var t = {
 	size: 1,
 	bg: 'white',
 	image:false,
-	buffer:''
+	buffer:'',
+	imageSize:1
 
 };
 // Joining a canvas
@@ -71,6 +72,7 @@ $(function() {
 	$( "#imageSlider" ).bind( "change", function(event, ui) {
 	   var theNewVal = $(this).val();
 	   imSize = theNewVal;
+	   console.log(imSize);
     });
 	
 ////////////////// SOCKET STUFF ////////////////////////////////////////////////
@@ -98,7 +100,7 @@ $(function() {
 		} else if(tweet.image){
 			var img = new Image();
 			img.src = "data:image/png;base64" + tweet.buffer;
-			ctx.drawImage(img, 20, 20);
+			ctx.drawImage(img, 20, 20,img.width*tweet.imageSize,img.height*tweet.imageSize);
 		}else{
 			ctx.lineWidth = tweet.size;
 			if(tweet.touch=="touchstart"){
@@ -248,6 +250,7 @@ function DrawingUtil(aCanvas) {
              //context.drawImage(img, 20, 20, img.width*1,img.height*1);
 			 t.image=true;
 			 t.buffer=img.src.toString('base64');
+			 t.imageSize = imSize;
 			 sendData(t);
 			 t.image = false;
 			 t.buffer ='';
