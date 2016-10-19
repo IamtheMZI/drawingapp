@@ -100,7 +100,7 @@ $(function() {
 		} else if(tweet.image){
 			var img = new Image();
 			img.src = "data:image/png;base64" + tweet.buffer;
-			ctx.drawImage(img, 20, 20,img.width*tweet.imageSize,img.height*tweet.imageSize);
+			ctx.drawImage(img, 20, 20);
 		}else{
 			ctx.lineWidth = tweet.size;
 			if(tweet.touch=="touchstart"){
