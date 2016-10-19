@@ -11,8 +11,7 @@ var t = {
 	size: 1,
 	bg: 'white',
 	image:false,
-	buffer:'',
-	imageSize:1
+	buffer:''
 
 };
 // Joining a canvas
@@ -250,7 +249,6 @@ function DrawingUtil(aCanvas) {
              //context.drawImage(img, 20, 20, img.width*1,img.height*1);
 			 t.image=true;
 			 t.buffer=img.src.toString('base64');
-			 t.imageSize = imSize;
 			 sendData(t);
 			 t.image = false;
 			 t.buffer ='';
