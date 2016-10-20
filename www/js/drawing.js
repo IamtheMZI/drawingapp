@@ -16,11 +16,12 @@ var t = {
 	clear: false,
 	color: 'black',
 	size: 1,
-	bg: 'white',
+	bg: 'white'
+};
+var im = {
 	image:false,
 	buffer:''
-
-};
+}
 // Joining a canvas
 var canvasinfo = {
 	name:'',
@@ -40,9 +41,9 @@ $(function() {
 	
 	sidenav.height = window.innerHeight;
 	c.width = window.innerWidth;
-	c.height = window.innerHeight;
-	theCanvas.width = window.innerWidth;
-	theCanvas.height = window.innerHeight;
+	c.height = window.innerHeight -$("#theHeader").height()-10;;
+	theCanvas.width = window.innerWidth ;
+	theCanvas.height = window.innerHeight - $("#theHeader").height() - 10;
 
 /////////////////   BINDING TO CHANGES ON BUTTONS AND SLIDERS ///////////////////////////////////	
 	$( "#weightSlider" ).bind( "change", function(event, ui) {
@@ -103,11 +104,7 @@ $(function() {
 			t.bg = tweet.bg;
 			drawingUtil.setBackgroundColor(tweet.bg);
 			$('#theCanvas1').css('background-color',tweet.bg);
-		} else if(tweet.image){
-			var img = new Image();
-			img.src = "data:image/png;base64" + tweet.buffer;
-			ctx.drawImage(img, 20, 20);
-		}else{
+		} else {
 			ctx.lineWidth = tweet.size;
 			if(tweet.touch=="touchstart"){
 				ctx.beginPath();
@@ -122,6 +119,13 @@ $(function() {
 			}
 		}
 		
+	});
+	socket.on('image',function(data){
+		if(data.image){
+			var img = new Image();
+			img.src = "data:image/png;base64" + data.buffer;
+			ctx.drawImage(img, 20, 20);
+		}
 	});
 	// Disconnecting from the Server
 	socket.on('disconnect', function () {
@@ -253,12 +257,11 @@ function DrawingUtil(aCanvas) {
         FR.onload = function(e) {
            var img = new Image();
            img.onload = function() {
-             //context.drawImage(img, 20, 20, img.width*1,img.height*1);
-			 t.image=true;
-			 t.buffer=img.src.toString('base64');
-			 sendData(t);
-			 t.image = false;
-			 t.buffer ='';
+			 im.image=true;
+			 im.buffer=img.src.toString('base64');
+			 sendImage(im);
+			 im.image = false;
+			 im.buffer ='';
            };
            img.src = e.target.result;
         };       
@@ -283,6 +286,11 @@ function DrawingUtil(aCanvas) {
 		
 	}
 }
+ function sendImage(t){
+	if(socket.connected){
+		socket.emit("image",t);
+	}
+ }
  function sendData(t){
 	if(socket.connected){
 		socket.emit("tweet",t);

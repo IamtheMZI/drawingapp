@@ -40,34 +40,34 @@
 		  <a><div id="currentColor" class="strokeColor" style="background-color:black;border:4px solid gray"></div></a>
 		  <a> Stroke Color </a>
 		  <a>
-		    <button class="strokeColor" style="background-color:black" value="black"></button>
-			<button class="strokeColor" style="background-color:red" value="red"></button>
-			<button class="strokeColor" style="background-color:green" value="green"></button>
-			<button class="strokeColor" style="background-color:blue" value="blue"></button>
-			<button class="strokeColor" style="background-color:yellow" value="yellow"></button>
-			<button class="strokeColor" style="background-color:orange" value="orange"></button>
-			<button class="strokeColor" style="background-color:white" value="white"></button>
+		    <button class="strokeColor" style="background-color:black" value="black" onclick="closeNav()"></button>
+			<button class="strokeColor" style="background-color:red" value="red" onclick="closeNav()"></button>
+			<button class="strokeColor" style="background-color:green" value="green" onclick="closeNav()"></button>
+			<button class="strokeColor" style="background-color:blue" value="blue" onclick="closeNav()"></button>
+			<button class="strokeColor" style="background-color:yellow" value="yellow" onclick="closeNav()"></button>
+			<button class="strokeColor" style="background-color:orange" value="orange"  onclick="closeNav()"></button>
+			<button class="strokeColor" style="background-color:white" value="white" onclick="closeNav()"></button>
 		  </a><br>
 		  <a> Background Color </a>
 		  <a>
-		    <button class="bgColor" style="background-color:black" value="black"></button>
-			<button class="bgColor" style="background-color:red" value="red"></button>
-			<button class="bgColor" style="background-color:green" value="green"></button>
-			<button class="bgColor" style="background-color:blue" value="blue"></button>
-			<button class="bgColor" style="background-color:yellow" value="yellow"></button>
-			<button class="bgColor" style="background-color:orange" value="orange"></button>
-			<button class="bgColor" style="background-color:white" value="white"></button>
+		    <button class="bgColor" style="background-color:black" value="black" onclick="closeNav()"></button>
+			<button class="bgColor" style="background-color:red" value="red" onclick="closeNav()"></button>
+			<button class="bgColor" style="background-color:green" value="green" onclick="closeNav()"></button>
+			<button class="bgColor" style="background-color:blue" value="blue" onclick="closeNav()"></button>
+			<button class="bgColor" style="background-color:yellow" value="yellow" onclick="closeNav()"></button>
+			<button class="bgColor" style="background-color:orange" value="orange" onclick="closeNav()"></button>
+			<button class="bgColor" style="background-color:white" value="white" onclick="closeNav()"></button>
 		  </a><br>
 		  <a> Image File: </a><br/>
-		  <div><input type="file" id="imageLoader"/></div>
+		  <div><input type="file" id="imageLoader" onclick="closeNav()"/></div>
 		  <a>Image Size </a>
 		  <a> <input id="imageSlider" type="range" value="1" min="0.3" max="3" /> </a>
 		  
-		  <a><button id="clearScreen"> Clear Screen </button></a>
+		  <a onclick="closeNav()"><button id="clearScreen"> Clear Screen </button></a>
 		  <a onclick="window.plugins.insomnia.allowSleepAgain()" href="index.html"><button>Home Screen</button></a>
 		</div>
 		  <p id="demo"></p>
-		<div style="float:left;position:absolute">
+		<div id = "canvasElements"style="float:left;position:absolute">
 		<canvas background="img/ionic.png" id="theCanvas" style="border:1px solid black;alpha:0.5;display:inline;position:absolute"></canvas>
 		<canvas id="theCanvas1" style="border:1px solid black;alpha:0.5;display:inline"></canvas>
 		</div>

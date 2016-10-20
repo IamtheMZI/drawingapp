@@ -1,3 +1,6 @@
+#canvasElements{
+	overflow:hidden;
+}
 .sidenav {
     width: 0;
     position: fixed;
